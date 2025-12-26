@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>タップでボスを倒せ！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    .boss {
+      font-size: 100px;
+      margin: 20px 0;
+    }
+    .hp-bar {
+      width: 80%;
+      height: 20px;
+      background: #444;
+      margin: 0 auto 10px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .hp {
+      height: 100%;
+      background: red;
+      width: 100%;
+      transition: width 0.1s;
+    }
+    button {
+      font-size: 24px;
+      padding: 20px 40px;
+      margin-top: 20px;
+    }
+    .result {
+      font-size: 24px;
+      margin-top: 20px;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔥 タップでボスを倒せ！ 🔥</h1>
+
+  <div class="boss">👹</div>
+
+  <div class="hp-bar">
+    <div class="hp" id="hp"></div>
+  </div>
+  <p>HP: <span id="hpText">100</span></p>
+
+  <button id="tapBtn">タップ！</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    let bossHp = 100;
+    let tapCount = 0;
+    let startTime = null;
+    let gameOver = false;
+
+    const hpBar = document.getElementById("hp");
+    const hpText = document.getElementById("hpText");
+    const result = document.getElementById("result");
+    const button = document.getElementById("tapBtn");
+
+    button.addEventListener("click", () => {
+      if (gameOver) return;
+
+      if (!startTime) {
+        startTime = Date.now();
+      }
+
+      tapCount++;
+
+      let damage = 1;
+      if (tapCount % 10 === 0) {
+        damage = 2;
+      }
+
+      bossHp -= damage;
+      if (bossHp < 0) bossHp = 0;
+
+      hpText.textContent = bossHp;
+      hpBar.style.width = bossHp + "%";
+
+      if (bossHp === 0) {
+        gameOver = true;
+        const time = ((Date.now() - startTime) / 1000).toFixed(2);
+        result.textContent = `🎉 撃破！ タイム：${time} 秒`;
+        button.textContent = "終了";
+      }
+    });
+  </script>
+
+</body>
+</html>
